@@ -26,7 +26,7 @@ data "aws_iam_policy_document" "main" {
     condition {
       variable = "aws:sourceIp"
       test     = "IpAddress"
-      values   = local.whitelist_cidr #Restrict to your IP"
+      values   = var.whitelist_cidr #Restrict to your IP"
     }
     principals {
       type        = "AWS"
