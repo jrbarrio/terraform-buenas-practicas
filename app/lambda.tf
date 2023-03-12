@@ -13,9 +13,13 @@ resource "aws_lambda_function" "catalog-writer" {
   source_code_hash = data.archive_file.lambda.output_base64sha256
 
   runtime = "python3.9"
+
+  tags = {
+    Environment = var.environment
+    Project     = var.project
+  }
 }
 
-// dynamodb table Write Policy
 data "aws_iam_policy_document" "inline_policy" {
   statement {
     actions = [
@@ -43,6 +47,11 @@ resource "aws_iam_role" "iam_for_lambda" {
   inline_policy {
     name   = "policy-dynamodb-writer"
     policy = data.aws_iam_policy_document.inline_policy.json
+  }
+
+  tags = {
+    Environment = var.environment
+    Project     = var.project
   }
 
   assume_role_policy = <<EOF

@@ -10,8 +10,8 @@ clean:
 init: clean
 	@terraform init
 
-plan:
-	@terraform plan -out tfplan
+plan: init
+	@terraform plan -out tfplan -var-file="tfvars/dev.tfvars"
 
 apply:
 	@terraform apply -auto-approve tfplan

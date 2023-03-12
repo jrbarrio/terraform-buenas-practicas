@@ -1,10 +1,9 @@
 resource "aws_s3_bucket" "example_bucket" {
-  # bucket = var.bucket_name
-  bucket = "jorgerb-codely-bucket"
+  bucket = var.bucket_name
 
   tags = {
-    Environment = "dev"
-    Project = "terraform-buenas-practicas"
+    Environment = var.environment
+    Project     = var.project
   }
 }
 

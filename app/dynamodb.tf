@@ -1,6 +1,5 @@
 resource "aws_dynamodb_table" "apps_storage" {
-#   name           = var.dynamodb_name
-  name           = "jorgerb-codely-dynamodb"
+  name           = var.dynamodb_name
 
   billing_mode   = "PROVISIONED"
   read_capacity  = 1
@@ -19,7 +18,7 @@ resource "aws_dynamodb_table" "apps_storage" {
   }
 
   tags = {
-    Environment = "Dev"
-    Project     = "Codely course"
+    Environment = var.environment
+    Project     = var.project
   }
 }
