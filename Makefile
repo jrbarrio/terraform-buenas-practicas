@@ -1,13 +1,11 @@
 clean:
-	@rm -f tfplan
 	@rm -fR .terraform
 	@rm -f .terraform.lock.hcl
 	@rm -f terraform.tfstate
 	@rm -f terraform.tfstate.backup
 	@rm -f *.zip
 	@rm -fR build
-	@rm -f tfsec.txt
-	@rm -f infracost.txt
+	@rm -fR tmp
 
 init: clean
 	@terraform init
@@ -22,13 +20,14 @@ tfsec: validate
 	@tfsec .
 
 plan: validate
-	@terraform plan -out tfplan -var-file="tfvars/dev.tfvars"
-	tfsec . --soft-fail --out tfsec.txt --format text 
-	infracost auth login
-	infracost diff --path tfplan --out-file infracost.txt --format diff
+	@mkdir -p tmp
+	@terraform plan -out tmp/tfplan -var-file="tfvars/dev.tfvars"
+	@tfsec . --soft-fail --out tmp/tfsec.txt --format text 
+	@infracost auth login
+	@infracost breakdown --path . --format table --out-file tmp/infracost.txt
 
 apply:
-	@terraform apply -auto-approve tfplan
+	@terraform apply -auto-approve tmp/tfplan
 	@rm tfplan
 
 destroy: init
