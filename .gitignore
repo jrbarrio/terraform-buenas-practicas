@@ -4,3 +4,5 @@ tfplan
 *.backup
 terraform.tfstate
 build/
+tfsec.txt
+infracost.txt
