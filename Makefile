@@ -16,15 +16,18 @@ format: init
 validate: format
 	@terraform validate
 
-tfsec: validate
+lint: validate
+	@tflint --recursive --minimum-failure-severity=error --format=default
+
+tfsec: lint
 	@tfsec .
 
-plan: validate
+plan: lint
 	@mkdir -p tmp
 	@terraform plan -out tmp/tfplan -var-file="tfvars/dev.tfvars"
 	@tfsec . --soft-fail --out tmp/tfsec.txt --format text 
 	@infracost auth login
-	@infracost breakdown --path . --format table --out-file tmp/infracost.txt
+	@infracost breakdown --path . --terraform-var-file tfvars/dev.tfvars --format table --out-file tmp/infracost.txt
 
 apply:
 	@terraform apply -auto-approve tmp/tfplan
